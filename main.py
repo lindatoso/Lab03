@@ -14,19 +14,19 @@ def menu():
 
 def main():
     deposito = DepositoStrumenti("Deposito Strumenti Civico", "Alessandro Visconti")
-
+    indice=0
     while True:
         scelta = menu()
-
         if scelta == "1":
-            nuovo_responsabile = input("Inserisci il nuovo responsabile: ")
             # TODO: Aggiorna responsabile nel sistema
+            nuovo_responsabile = input(str("Inserisci il nuovo responsabile: "))
+            deposito.responsabile=nuovo_responsabile
 
         elif scelta == "2":
             while True:
                 try:
                     file_path = input("Inserisci il path del file da caricare: ").strip()
-                    deposito.carica_file_strumenti(file_path)
+                    indice=deposito.carica_file_strumenti(file_path)
                     break
                 except Exception as e:
                     print(e)
@@ -37,10 +37,11 @@ def main():
             try:
                 anno_acquisto = int(input("Anno di acquisto: ").strip())
                 valore = float(input("Valore (euro): ").strip())
+                codice = indice
             except ValueError:
                 print("Errore: inserire valori numerici validi per anno e valore.")
                 continue
-            strumento = deposito.aggiungi_strumento(tipo, marca, anno_acquisto, valore)
+            strumento = deposito.aggiungi_strumento(codice, tipo, marca, anno_acquisto, valore)
             print(f"Strumento aggiunto: {strumento}")
 
         elif scelta == "4":
