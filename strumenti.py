@@ -9,3 +9,11 @@ class Strumenti:
 
     def __str__(self):
         return f"{self.__codice}, {self.__tipo}, {self.__marca}, {self.__anno_acquisto}, {self.__valore}"
+
+    @property
+    def marca(self):
+        return self.__marca
+
+    @property
+    def codice(self):
+        return self.__codice

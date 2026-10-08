@@ -29,7 +29,7 @@ class DepositoStrumenti:
                 lista_strumenti.append(item)
                 indice=riga[0]
             filein.close()  # Chiudo il file
-            return indice
+            return lista_strumenti
 
         except FileNotFoundError:
             print('File non trovato')
@@ -40,22 +40,42 @@ class DepositoStrumenti:
         """Aggiunge uno strumento nel deposito: aggiunge solo nel sistema e non aggiorna il file"""
         # TODO
         from strumenti import Strumenti
-        numero=0
-        if codice!=0:
-            numero=int(codice[1:])
-        code='S'+str(numero+1)
+        code='S'+str(codice+1)
         item=Strumenti(code, tipo, marca, anno_acquisto, valore)
         return item
 
 
-    def strumenti_ordinati_per_marca(self):
+    def strumenti_ordinati_per_marca(self, lista_strumenti):
         """Ordina gli strumenti per marca in ordine alfabetico"""
         # TODO
+        from operator import attrgetter
+        ordinato=sorted(lista_strumenti, key=attrgetter('marca'))
+        return ordinato
 
-    def nuovo_prestito(self, data, id_strumento, cognome_allievo):
+
+    def nuovo_prestito(self, data, id_strumento, cognome_allievo, lista_strumenti, lista_prestiti):
         """Crea un nuovo prestito"""
         # TODO
+        from prestiti import Prestiti
+        codice = len(lista_prestiti) + 1
+        for i in lista_prestiti:
+            if i.id_strumento==id_strumento:
+                raise Exception('Lo strumento selezionato è già in prestito')
 
-    def termina_prestito(self, id_prestito):
+        prestito = Prestiti(codice, data, id_strumento, cognome_allievo, lista_strumenti)
+        return prestito
+
+    def termina_prestito(self, id_prestito, lista_prestiti):
         """Termina un prestito in atto"""
         # TODO
+        from prestiti import Prestiti
+        flag=False
+        for i in lista_prestiti:
+            if i.id==id_prestito:
+                lista_prestiti.remove(i)
+                flag=True
+                break
+        if not flag:
+            raise Exception('Il prestito selezionato non esiste')
+
+        return lista_prestiti
