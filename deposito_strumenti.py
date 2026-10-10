@@ -1,13 +1,17 @@
-import csv
+import csv # per leggere
+from strumenti import Strumenti # Importo la classe strumenti per inserire i dati
+from operator import attrgetter
+from prestiti import Prestiti
+
 class DepositoStrumenti:
     def __init__(self, nome, responsabile):
         """Inizializza gli attributi e le strutture dati"""
         # TODO
-        self.__nome=nome # Inizializzo i due attributi
+        self.__nome=nome # Inizializzo i due attributi con dunder
         self.__responsabile=responsabile
 
     @property
-    def responsabile(self):
+    def responsabile(self): # per mostrare resposabile attuale devo rendere accessibile l'attributo
         return self.__responsabile
 
     @responsabile.setter # Per cambiare il valore dell'attributo nascosto uso metodo setter
@@ -17,17 +21,14 @@ class DepositoStrumenti:
     def carica_file_strumenti(self, file_path):
         """Carica gli strumenti dal file"""
         # TODO
-        try:
+        try: # per scatenare errore
             filein=open(file_path, 'r', encoding='utf-8') # Apro file in lettura
             file=csv.reader(filein) # Uso csv.reader per leggere le singole righe
             from strumenti import Strumenti # Importo la classe strumenti per inserire i dati
-            lista_strumenti=[]
-            indice=''
+            lista_strumenti=[] # Inizializzo lista vuota per contenere strumenti
             for riga in file:
                 item=Strumenti(riga[0],riga[1], riga[2], int(riga[3]), float(riga[4])) # Per ogni riga associo un oggetto in strumento
-                #print(item.__str__())
-                lista_strumenti.append(item)
-                indice=riga[0]
+                lista_strumenti.append(item) # Aggiungo ogni oggetto alla lista
             filein.close()  # Chiudo il file
             return lista_strumenti
 
@@ -39,46 +40,46 @@ class DepositoStrumenti:
     def aggiungi_strumento(self, codice, tipo, marca, anno_acquisto, valore):
         """Aggiunge uno strumento nel deposito: aggiunge solo nel sistema e non aggiorna il file"""
         # TODO
-        from strumenti import Strumenti
-        code='S'+str(codice+1)
-        item=Strumenti(code, tipo, marca, anno_acquisto, valore)
+
+        code='S'+str(codice+1) # Compongo il codice dello strumento concatenando S con il numero progressivo
+        item=Strumenti(code, tipo, marca, anno_acquisto, valore) # Creo oggetto strumento
         return item
 
 
     def strumenti_ordinati_per_marca(self, lista_strumenti):
         """Ordina gli strumenti per marca in ordine alfabetico"""
         # TODO
-        from operator import attrgetter
-        if len(lista_strumenti)==0:
+
+        if len(lista_strumenti)==0: # Se non ci sono strumenti restituisci None
             return None
         else:
-            ordinato=sorted(lista_strumenti, key=attrgetter('marca'))
+            ordinato=sorted(lista_strumenti, key=attrgetter('marca')) # Creo copia lista, ordinata per attributo marca (con attrgetter python riconosce stringa come nome attributo)
             return ordinato
 
 
     def nuovo_prestito(self, data, id_strumento, cognome_allievo, lista_strumenti, lista_prestiti):
         """Crea un nuovo prestito"""
         # TODO
-        from prestiti import Prestiti
-        codice = len(lista_prestiti) + 1
+
+        codice = len(lista_prestiti) + 1 # Il codice è dato dalla lunghezza della lista dei prestiti + 1
         for i in lista_prestiti:
-            if i.id_strumento==id_strumento:
+            if i.id_strumento==id_strumento: # controllo che lo stesso strumento non venga prestato a più persone contemporaneamente
                 raise Exception('Lo strumento selezionato è già in prestito')
 
-        prestito = Prestiti(codice, data, id_strumento, cognome_allievo, lista_strumenti)
+        prestito = Prestiti(codice, data, id_strumento, cognome_allievo, lista_strumenti) # Creo oggetto prestito
         return prestito
 
     def termina_prestito(self, id_prestito, lista_prestiti):
         """Termina un prestito in atto"""
         # TODO
-        from prestiti import Prestiti
-        flag=False
+
+        flag=False # Confronto id inserito con codici in lista prestiti per rimuovere il corrispondente
         for i in lista_prestiti:
             if i.id==id_prestito:
                 lista_prestiti.remove(i)
                 flag=True
                 break
         if not flag:
-            raise Exception('Il prestito selezionato non esiste')
+            raise Exception('Il prestito selezionato non esiste') # Se non trovo il codice sollevo eccezione
 
         return lista_prestiti

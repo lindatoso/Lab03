@@ -7,18 +7,19 @@ class Strumenti:
         self.__anno_acquisto=anno_acquisto
         self.__valore=valore
 
-    def __str__(self):
+    def __str__(self): # Definisco print
         return f"{self.__codice}, {self.__tipo}, {self.__marca}, {self.__anno_acquisto}, {self.__valore}"
 
-    @property
+    @property  # Getter per ordinamento alfabetico
     def marca(self):
         return self.__marca
 
-    @property
+    @property # Getter per aggiungere prestito
     def codice(self):
         return self.__codice
 
-    @property
+    # GETTER PER CHECK UGUAGLIANZA STRUMENTI IN AGGIUNGI STRUMENTO - IN ALTERNATIVA DATACLASS
+    '''@property
     def tipo(self):
         return self.__tipo
 
@@ -28,4 +29,4 @@ class Strumenti:
 
     @property
     def anno_acquisto(self):
-        return self.__anno_acquisto
+        return self.__anno_acquisto'''
