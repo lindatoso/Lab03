@@ -49,8 +49,11 @@ class DepositoStrumenti:
         """Ordina gli strumenti per marca in ordine alfabetico"""
         # TODO
         from operator import attrgetter
-        ordinato=sorted(lista_strumenti, key=attrgetter('marca'))
-        return ordinato
+        if len(lista_strumenti)==0:
+            return None
+        else:
+            ordinato=sorted(lista_strumenti, key=attrgetter('marca'))
+            return ordinato
 
 
     def nuovo_prestito(self, data, id_strumento, cognome_allievo, lista_strumenti, lista_prestiti):

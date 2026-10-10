@@ -20,6 +20,7 @@ def main():
         scelta = menu()
         if scelta == "1":
             # TODO: Aggiorna responsabile nel sistema
+            print("Responsabile attuale: ", deposito.responsabile)
             nuovo_responsabile = input(str("Inserisci il nuovo responsabile: "))
             deposito.responsabile=nuovo_responsabile
 
@@ -43,13 +44,26 @@ def main():
                 print("Errore: inserire valori numerici validi per anno e valore.")
                 continue
             strumento = deposito.aggiungi_strumento(codice, tipo, marca, anno_acquisto, valore)
-            elenco_strumenti.append(strumento)
-            print(f"Strumento aggiunto: {strumento}")
+            flag=True
+            for i in elenco_strumenti:
+                if i.tipo==strumento.tipo and i.marca==strumento.marca and i.valore==strumento.valore and i.anno_acquisto==strumento.anno_acquisto:
+                    flag=False
+                    break
+                else:
+                    flag=True
+            if flag is True:
+                elenco_strumenti.append(strumento)
+                print(f"Strumento aggiunto: {strumento}")
+            else:
+                print("Strumento già presente")
 
         elif scelta == "4":
             strumenti_ordinati = deposito.strumenti_ordinati_per_marca(elenco_strumenti)
-            for s in strumenti_ordinati:
-                print(f'- {s}')
+            if strumenti_ordinati is None:
+                print("Nessuno strumento inserito")
+            else:
+                for s in strumenti_ordinati:
+                    print(f'- {s}')
 
         elif scelta == "5":
             id_strumento = input("ID strumento: ")
@@ -59,8 +73,6 @@ def main():
                 prestito = deposito.nuovo_prestito(data, id_strumento, cognome_allievo, elenco_strumenti, elenco_prestiti)
                 elenco_prestiti.append(prestito)
                 print(f"Prestito andato a buon fine: {prestito}")
-                for i in elenco_prestiti:
-                    print(i)
             except Exception as e:
                 print(e)
 
@@ -69,8 +81,6 @@ def main():
             try:
                 elenco_prestiti=deposito.termina_prestito(id_prestito, elenco_prestiti)
                 print(f"Prestito {id_prestito} terminato con successo.")
-                for i in elenco_prestiti:
-                    print(i)
             except Exception as e:
                 print(e)
 

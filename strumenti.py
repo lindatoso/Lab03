@@ -17,3 +17,15 @@ class Strumenti:
     @property
     def codice(self):
         return self.__codice
+
+    @property
+    def tipo(self):
+        return self.__tipo
+
+    @property
+    def valore(self):
+        return self.__valore
+
+    @property
+    def anno_acquisto(self):
+        return self.__anno_acquisto
